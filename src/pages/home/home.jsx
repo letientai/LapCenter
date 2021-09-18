@@ -40,7 +40,7 @@ function Home() {
       setData(
         products.sort((a,b) => parseFloat(a.price) - parseFloat(b.price) )
       )
-    }else{
+    }else if(e.target.value == 2){
       setData(
         products.sort((a,b) => parseFloat(b.price) - parseFloat(a.price) )
       )
@@ -59,7 +59,7 @@ function Home() {
 
   return (
     <div className="home-container">
-      <Navbar />
+      <Navbar className="navbar"/>
 
       <div className="menuLeft">
         <Input

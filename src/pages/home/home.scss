@@ -1,10 +1,14 @@
 .home-container {
   display: flex;
   justify-content: space-between;
-
+  // width: 1360px;
+  // margin: auto;
+  // .navbar{
+  //   width: 1360px;
+  // }
   .menuLeft {
     width: 15%;
-    padding-top: 80px;
+    padding-top: 90px;
     padding-left: 10px;
 
     .selectForm {

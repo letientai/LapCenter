@@ -2,33 +2,33 @@ import Navbar from "../../components/navbar/navbar";
 import "./login.scss";
 import { Input, Button } from "semantic-ui-react";
 import React, { useState } from "react";
-import {useHistory} from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 const account = { username: "admin", password: "admin" };
 
 function Login() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory()
+  const history = useHistory();
   const handleChange = (e, field) => {
-    if(field == 'username'){
-        setUserName(e.target.value);
-    }else if(field == 'password'){
-        setPassword(e.target.value)
+    if (field == "username") {
+      setUserName(e.target.value);
+    } else if (field == "password") {
+      setPassword(e.target.value);
     }
   };
   const onLogin = () => {
     console.log(userName, password);
-    if(userName === account.username && password === account.password){
-        console.log('Đăng nhập thành công');
-        alert('Đăng nhập thành công!!!')
-        history.push('/')
-    }else{
-        console.log('Đăng nhập thất bại');
-        alert('Nhập sai tên đăng nhập hoặc mật khẩu!!!')
-        setPassword('')
+    if (userName === account.username && password === account.password) {
+      console.log("Đăng nhập thành công");
+      alert("Đăng nhập thành công!!!");
+      history.push("/");
+    } else {
+      console.log("Đăng nhập thất bại");
+      alert("Nhập sai tên đăng nhập hoặc mật khẩu!!!");
+      setPassword("");
     }
-  }
+  };
   return (
     <div>
       <Navbar />
@@ -58,12 +58,17 @@ function Login() {
               value={password}
             />
             <br />
-            <Button color="green" onClick = {onLogin}> 
-            Đăng nhập
-             </Button>
+            <Button className="custom-btn btn-3" onClick={onLogin}>
+              <span>Đăng nhập</span>
+            </Button>
             <p style={{ marginTop: "20px", textAlign: "center" }}>
               Bạn chưa có tài khoản?{" "}
-              <a className="register-text" onClick = {() => history.push('./register')}>Đăng ký ngay.</a>
+              <a
+                className="register-text"
+                onClick={() => history.push("./register")}
+              >
+                Đăng ký ngay.
+              </a>
             </p>
           </div>
         </div>

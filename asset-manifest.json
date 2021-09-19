@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/LapCenter/static/css/main.1adb677c.chunk.css",
+    "main.js": "/LapCenter/static/js/main.9c192b0a.chunk.js",
+    "main.js.map": "/LapCenter/static/js/main.9c192b0a.chunk.js.map",
+    "runtime-main.js": "/LapCenter/static/js/runtime-main.ca4cf1f0.js",
+    "runtime-main.js.map": "/LapCenter/static/js/runtime-main.ca4cf1f0.js.map",
+    "static/css/2.b066113e.chunk.css": "/LapCenter/static/css/2.b066113e.chunk.css",
+    "static/js/2.52ff2282.chunk.js": "/LapCenter/static/js/2.52ff2282.chunk.js",
+    "static/js/2.52ff2282.chunk.js.map": "/LapCenter/static/js/2.52ff2282.chunk.js.map",
+    "static/js/3.9ee537b1.chunk.js": "/LapCenter/static/js/3.9ee537b1.chunk.js",
+    "static/js/3.9ee537b1.chunk.js.map": "/LapCenter/static/js/3.9ee537b1.chunk.js.map",
+    "index.html": "/LapCenter/index.html",
+    "static/css/2.b066113e.chunk.css.map": "/LapCenter/static/css/2.b066113e.chunk.css.map",
+    "static/css/main.1adb677c.chunk.css.map": "/LapCenter/static/css/main.1adb677c.chunk.css.map",
+    "static/js/2.52ff2282.chunk.js.LICENSE.txt": "/LapCenter/static/js/2.52ff2282.chunk.js.LICENSE.txt",
+    "static/media/semantic.min.css": "/LapCenter/static/media/outline-icons.ddae9b1b.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ca4cf1f0.js",
+    "static/css/2.b066113e.chunk.css",
+    "static/js/2.52ff2282.chunk.js",
+    "static/css/main.1adb677c.chunk.css",
+    "static/js/main.9c192b0a.chunk.js"
+  ]
+}

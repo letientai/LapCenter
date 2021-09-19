@@ -75,8 +75,8 @@ function Register() {
               value={cfpassword}
             />
             <br />
-            <Button color="green" onClick={onLogin}>
-              Đăng ký
+            <Button className="custom-btn btn-3" onClick={onLogin}>
+              <span>Đăng ký</span>
             </Button>
           </div>
         </div>

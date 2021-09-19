@@ -24,6 +24,73 @@
         margin: 5px 0 10px 0;
         width: 100%;
       }
+      .custom-btn {
+        width: 140px;
+        color: #fff;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        display: inline-block;
+         box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+         7px 7px 20px 0px rgba(0,0,0,.1),
+         4px 4px 5px 0px rgba(0,0,0,.1);
+        outline: none;
+      }
+      .btn-3 {
+        background: rgb(22, 190, 78);
+        background: linear-gradient(10deg, rgb(22, 190, 78) 30%, rgb(3, 192, 44) 70%);
+        height: 40px;
+        line-height: 42px;
+        padding: 0;
+        border: none;
+        
+      }
+      .btn-3 span {
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .btn-3:before,
+      .btn-3:after {
+        position: absolute;
+        content: "";
+        right: 0;
+        top: 0;
+         background: rgb(10, 175, 10);
+        transition: all 0.3s ease;
+      }
+      .btn-3:before {
+        height: 0%;
+        width: 2px;
+      }
+      .btn-3:after {
+        width: 0%;
+        height: 2px;
+      }
+      .btn-3:hover{
+         background: transparent;
+        box-shadow: none;
+      }
+      .btn-3:hover:before {
+        height: 100%;
+      }
+      .btn-3:hover:after {
+        width: 100%;
+      }
+      .btn-3 span:hover{
+         color: rgb(22, 190, 78);
+      }
+      .btn-3 span:before,
+      .btn-3 span:after {
+        position: absolute;
+        content: "";
+        left: 0;
+        bottom: 0;
+         background: rgb(22, 190, 78);
+        transition: all 0.3s ease;
+      }
     }
 
     .register-text {

@@ -147,7 +147,7 @@ function Home() {
           onChange={onChangeSearch}
         />
         <div className="selectForm">
-          <p>Hãng</p>
+          <b>Hãng</b>
           <select className="selectBox" value={brand} onChange={onSubmitBrand}>
             <option selected value="">
               All
@@ -159,7 +159,7 @@ function Home() {
           </select>
         </div>
         <div className="selectForm">
-          <p>Giá</p>
+          <b>Giá</b>
           <select className="selectBox" value={price} onChange={onSubmitPrice}>
             <option selected value=""></option>
             <option value="1">Từ thấp đến cao</option>

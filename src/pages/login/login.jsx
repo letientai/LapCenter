@@ -3,11 +3,11 @@ import "./login.scss";
 import { Input, Button } from "semantic-ui-react";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-
+const axios = require("axios");
 const account = { username: "admin", password: "admin" };
 
 function Login() {
-  const [userName, setUserName] = useState("");
+  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
   const handleChange = (e, field) => {
@@ -18,16 +18,18 @@ function Login() {
     }
   };
   const onLogin = () => {
-    console.log(userName, password);
-    if (userName === account.username && password === account.password) {
-      console.log("Đăng nhập thành công");
-      alert("Đăng nhập thành công!!!");
-      history.push("/");
-    } else {
-      console.log("Đăng nhập thất bại");
-      alert("Nhập sai tên đăng nhập hoặc mật khẩu!!!");
-      setPassword("");
-    }
+    axios.post('https://lap-center.herokuapp.com/api/login', {
+      username: username,
+      password: password
+    })
+    .then(function (response) {
+      console.log(response);
+      history.push('./')
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("Sai mat khau hoac ten dang nhap!!")
+    });
   };
   return (
     <div>
@@ -45,7 +47,7 @@ function Login() {
               placeholder="Username"
               className="inputText"
               onChange={(e) => handleChange(e, "username")}
-              value={userName}
+              value={username}
             />
             <br />
             <label style={{ marginTop: "10px" }}>Mật khẩu</label>

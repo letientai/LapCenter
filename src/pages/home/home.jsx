@@ -11,124 +11,46 @@ function Home() {
   const [price, setPrice] = useState("");
   const [brand, setBrand] = useState("");
   const axios = require("axios");
+  const [loading, setLoading] = useState(true);
 
   const onChangeSearch = (e) => {
     setSearch(e.target.value);
-    console.log(e.target.value);
   };
-  // const onChangeBrand = (e) =>{
-  //   setBrand(e.target.value);
-  // }
-
   const onSubmitSearch = (e) => {
-    // setData(
-    //   products.filter((item) =>
-    //     item?.name?.toLocaleLowerCase()?.includes(search?.toLocaleLowerCase())
-    //   )
-    // );
-    const searchName = "https://lap-center.herokuapp.com/api/product?productName=";
-    const linkSearchName = searchName.concat(search)
-    console.log(linkSearchName);
-    axios
-      .get(linkSearchName)
-      .then(function (response) {
-        setData(response.data.products);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      setPrice("")
-      setBrand("All")
+    let url = `https://lap-center.herokuapp.com/api/product?productName=${search}&productBrand=${brand}&orderByColumn=price&orderByDirection=${price}`;
+    fetchData(url);
   };
   const onSubmitBrand = async (e) => {
     await setBrand(e.target.value);
-    // await setData(
-    //   products.filter((item) =>
-    //     item?.name
-    //       ?.toLocaleLowerCase()
-    //       ?.includes(e.target.value?.toLocaleLowerCase())
-    //   )
-    // );
-    const searchBR = "https://lap-center.herokuapp.com/api/product?productBrand=";
-    const linkSearchBR = searchBR.concat(e.target.value)
-    console.log(linkSearchBR);
-    axios
-      .get(linkSearchBR)
-      .then(function (response) {
-        setData(response.data.products);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      setPrice("")
-      setSearch("")
+    let url = `https://lap-center.herokuapp.com/api/product?productName=${search}&productBrand=${e.target.value}&orderByColumn=price&orderByDirection=${price}`;
+    await fetchData(url);
   };
   const onSubmitPrice = async (e) => {
-    setPrice(e.target.value);
-    if (e.target.value == 1) {
-      // setData(
-      //   data.sort((a, b) => parseFloat(a.price) - parseFloat(b.price))
-      // );
-      axios
-      .get("https://lap-center.herokuapp.com/api/product?orderByColumn=price&orderByDirection=asc")
-      .then(function (response) {
-        setData(response.data.products);
-      })
-    } 
-    else if (e.target.value == 2) {
-      // setData(
-      //   data.sort((a, b) => parseFloat(b.price) - parseFloat(a.price))
-      // );
-      axios
-      .get("https://lap-center.herokuapp.com/api/product?orderByColumn=price&orderByDirection=desc")
-      .then(function (response) {
-        setData(response.data.products);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      
-    } 
-    setBrand("All")
-    setSearch("")
+    await setPrice(e.target.value);
+    let url = `https://lap-center.herokuapp.com/api/product?productName=${search}&productBrand=${brand}&orderByColumn=price&orderByDirection=${e.target.value}`;
+    await fetchData(url);
   };
 
-  const fetchData = async () => {
-    // await setData(products);
-    ////////Cách 1
-    ///start call API
+  const fetchData = async (url) => {
+    setLoading(true);
     axios
-      .get("https://lap-center.herokuapp.com/api/product")
+      .get(url)
       .then(function (response) {
-        // handle success
-        console.log('đúng',response.data.products);
         setData(response.data.products);
+        setLoading(false);
       })
       .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      /// end call API
-      ///////Cách 2
-      // fetch('https://lap-center.herokuapp.com/api/product')
-      // .then(response => response.json())
-      // .then(data => {
-      //   console.log('Success:', data);
-      //   setData(data.products)
-      // })
-      // .catch((error) => {
-      //   console.error('Error:', error);
-      // });
+        setLoading(false);
+      });
   };
 
   useEffect(async () => {
-    await fetchData();
+    let url = `https://lap-center.herokuapp.com/api/product?`;
+    await fetchData(url);
   }, []);
-  const [loadingPage, setLoadingPage] = useState(true);
-  setTimeout(function(){ setLoadingPage(false) }, 2000);
 
   return (
-    <Segment className="home-container" loading={loadingPage}>
+    <div className="home-container">
       <Navbar className="navbar" />
 
       <div className="menuLeft">
@@ -162,18 +84,17 @@ function Home() {
           <b>Giá</b>
           <select className="selectBox" value={price} onChange={onSubmitPrice}>
             <option selected value=""></option>
-            <option value="1">Từ thấp đến cao</option>
-            <option value="2">Từ cao đến thấp</option>
+            <option value="asc">Từ thấp đến cao</option>
+            <option value="desc">Từ cao đến thấp</option>
           </select>
         </div>
       </div>
-      <div className="product">
+      <Segment loading={loading} className="product">
         {data.map((item) => (
           <Card product={item} />
         ))}
-      </div>
-    </Segment>
-    
+      </Segment>
+    </div>
   );
 }
 

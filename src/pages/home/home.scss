@@ -1,33 +1,44 @@
 .home-container {
-  display: flex;
-  justify-content: space-between;
-  // width: 1360px;
-  // margin: auto;
-  // .navbar{
-  //   width: 1360px;
-  // }
-  margin: 0 !important;
-  padding: 0 !important;
-  .menuLeft {
-    width: 15%;
-    padding-top: 90px;
-    padding-left: 10px;
+  padding-bottom: 70px;
+  .filter {
+    width: 70%;
+    margin: 0 auto;
+    display: flex;
+    // justify-content: space-around;
+    padding-top: 85px;
+    padding-bottom: 5px;
+    flex-wrap: wrap;
+
+    .search {
+      margin-left: 5px;
+    }
 
     .selectForm {
       display: flex;
-      justify-content: space-between;
-      margin-top: 15px;
-      b{
-        margin-top: 3px;
-      }
+      justify-content: start;
+      margin-top: 10px;
     }
 
     .selectBox {
       padding: 5px;
       margin: 0 0 0 5px;
       width: 150px;
+      height: 36px;
+      margin-top: -9px;
     }
   }
+
+  .container-body {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .menuLeft {
+    width: 15%;
+    padding-top: 80px;
+    padding-left: 10px;
+  }
+
   .menuRight {
     width: 15%;
     padding-top: 80px;
@@ -37,8 +48,15 @@
     flex-wrap: wrap;
     flex: start;
     display: flex;
-    margin-top: 80px !important;
-    width: 83% !important;
-    
+    width: 70%;
+    z-index: 1;
+    border: none !important;
+
+    .noResults {
+      width: 100%;
+    }
+  }
+  .paginator{
+    text-align: center;
   }
 }

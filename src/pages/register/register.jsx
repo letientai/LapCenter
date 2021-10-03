@@ -4,7 +4,6 @@ import { Input, Button } from "semantic-ui-react";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-const account = { username: "admin", password: "admin" };
 
 function Register() {
   const [userName, setUserName] = useState("");
@@ -12,17 +11,17 @@ function Register() {
   const [cfpassword, setcfPassword] = useState("");
   const history = useHistory();
   const handleChange = (e, field) => {
-    if (field == "username") {
+    if (field === "username") {
       setUserName(e.target.value);
-    } else if (field == "password") {
+    } else if (field === "password") {
       setPassword(e.target.value);
-    } else if (field == "cfpassword") {
+    } else if (field === "cfpassword") {
       setcfPassword(e.target.value);
     }
   };
   const onLogin = () => {
     console.log(userName, password);
-    if (userName == "" || password == "" || cfpassword == "") {
+    if (userName === "" || password === "" || cfpassword === "") {
       alert("Yêu cầu nhập đủ thông tin!!");
     } else {
       if (cfpassword === password) {

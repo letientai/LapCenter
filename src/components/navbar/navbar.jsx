@@ -9,7 +9,7 @@ import { useHistory } from "react-router-dom";
 const Navbar = (props) => {
     const history = useHistory();
     const backToHome = () => {
-    history.push('./');
+    history.push('/');
     }
     return(
         <div className='navbar'>
@@ -17,10 +17,10 @@ const Navbar = (props) => {
                 <img className='logo' src={logo} onClick={backToHome}/>
             </p>
             <div className='options'>
-                <Link to='./' className='option'>TRANG CHỦ</Link>
-                <Link to='./introduct' className='option'>GIỚI THIỆU</Link>
-                <Link to='./contact' className='option'>LIÊN HỆ</Link>
-                <Link to='./login' className='option'>LOGIN</Link>
+                <Link to='/' className='option'>TRANG CHỦ</Link>
+                <Link to='/introduct' className='option'>GIỚI THIỆU</Link>
+                <Link to='/contact' className='option'>LIÊN HỆ</Link>
+                <Link to='/login' className='option'>LOGIN</Link>
             </div>
         </div>
     )

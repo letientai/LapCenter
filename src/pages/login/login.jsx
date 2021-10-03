@@ -4,16 +4,15 @@ import { Input, Button } from "semantic-ui-react";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 const axios = require("axios");
-const account = { username: "admin", password: "admin" };
 
 function Login() {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
   const handleChange = (e, field) => {
-    if (field == "username") {
+    if (field === "username") {
       setUserName(e.target.value);
-    } else if (field == "password") {
+    } else if (field === "password") {
       setPassword(e.target.value);
     }
   };

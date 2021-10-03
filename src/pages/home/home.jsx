@@ -2,7 +2,6 @@ import "./home.scss";
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar/navbar";
 import Card from "../../components/cards/card";
-import products from "../../assets/data/product";
 import { Icon, Input, Segment, Pagination } from "semantic-ui-react";
 const axios = require("axios");
 
@@ -73,7 +72,7 @@ function Home() {
   useEffect(async () => {
     let url = `https://lap-center.herokuapp.com/api/product?`;
     await fetchData(url);
-  }, []);
+  },[]);
 
   return (
     <div className="home-container">

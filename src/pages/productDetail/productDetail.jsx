@@ -4,6 +4,7 @@ import Navbar from "../../components/navbar/navbar";
 import CardItem from "../../components/cardItem/cardItem";
 import { Segment, Button, Table} from "semantic-ui-react";
 import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -33,11 +34,15 @@ const ProductDetail = () => {
   const[sameProduct, setSameProduct] = useState([]);
   const[image, setImage] = useState();
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
   const location = useLocation();
   const id = location.pathname?.split('product/')[1];
   // const id = location.pathname?.replace('product/', '');
 
 
+  const moveToBuy = () =>{
+    history.push(`/buy/${id}`)
+  }
 
   useEffect (() => {
     window.scrollTo(0, 0);
@@ -112,7 +117,7 @@ const ProductDetail = () => {
               <div className="discount-content">something</div>
             </div>
             <div className="detail-buy">
-              <Button color="red">MUA NGAY</Button>
+              <Button color="red" onClick={moveToBuy}>MUA NGAY</Button>
               <p>
                 GỌI NGAY <a href="tel:+84969442510"> 0969 44 2510 </a> ĐỂ GIỮ
                 HÀNG

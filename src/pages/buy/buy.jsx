@@ -8,6 +8,8 @@ import {
   Label,
   Form,
   TextArea,
+  Modal,
+  Image,
 } from "semantic-ui-react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -21,7 +23,12 @@ const Buy = () => {
   const [image, setImage] = useState();
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [totalMoney, setTotalMoney] = useState(data.price);
+  const [open, setOpen] = React.useState(false);
+  const [openDialog, setOpenDialog] =useState(false);
+  const [message, setMessage] =useState(false);
+
+
+
 
   const location = useLocation();
   const id = location.pathname?.split("buy/")[1];
@@ -57,8 +64,6 @@ const Buy = () => {
     }
   };
 
- 
-
   let checkInfo = true;
   if (!customerName || !phoneNumber || !email || !address) checkInfo = true;
   if (customerName && phoneNumber && email && address) checkInfo = false;
@@ -82,11 +87,37 @@ const Buy = () => {
       // code block
     }
   };
-
+  const onOrder = () => {
+    setOpen(false);
+    setLoading(true)
+    axios
+      .post("https://lap-center.herokuapp.com/api/order/addOrder", {
+        customerName: customerName,
+        email: email,
+        phone: phoneNumber,
+        address: address,
+        productName: data.name,
+        productBrand: data.brand,
+        quantity: quantity,
+        orderStatus: 1,
+      })
+      .then(function (res) {
+        setLoading(false)
+        console.log(res);
+        setOpenDialog(true)
+        setMessage("Đặt hàng thành công!!!")
+        
+      })
+      .catch(function (err) {
+        console.log(err);
+        setOpenDialog(false)
+        setMessage("Đã có lỗi xảy ra. Vui lòng kiểm tra lại!!")
+      });
+  };
   return (
     <div>
       <Navbar />
-      <Segment className="buy-container">
+      <Segment className="buy-container" loading={loading}>
         <div className="buy-title">
           <p>Để đặt hàng</p>
           <span>
@@ -100,10 +131,7 @@ const Buy = () => {
             <p>{data.name}</p>
             <div className="quantity">
               <Button icon="minus" onClick={() => onChangeQuantity("minus")} />
-              <Input
-                className="inp-quantity"
-                value={quantity}
-              />
+              <Input className="inp-quantity" value={quantity} />
               <Button icon="plus" onClick={() => onChangeQuantity("plus")} />
               <h4>{data.price} đ</h4>
             </div>
@@ -152,14 +180,86 @@ const Buy = () => {
                     onChange={(e) => onChangeInfo(e, "address")}
                   />
                 </Form.Field>
-                <Button color="red" disabled={checkInfo} className="btn-order">
-                  Đặt hàng
-                </Button>
+                <Modal
+                  onClose={() => setOpen(false)}
+                  onOpen={() => setOpen(true)}
+                  open={open}
+                  trigger={
+                    <Button color="red" disabled={checkInfo} className="btn-order">
+                      Đặt hàng
+                    </Button>
+                  }
+                >
+                  <Modal.Header>
+                    <h2 className="txt-check">XÁC NHẬN THÔNG TIN</h2>
+                  </Modal.Header>
+                  <Modal.Content image>
+                    <Image size="medium" src={image} wrapped />
+                    <Modal.Description>
+                      <h5 className="txt-title">Thông tin sản phẩm</h5>
+                      <div className="info-check">
+                        <p>Tên sản phẩm:</p>
+                        <span>{data.name}</span>
+                      </div>
+                      <div className="info-check">
+                        <p>Hãng:</p>
+                        <span>{data.brand}</span>
+                      </div>
+                      <div className="info-check">
+                        <p>Số lượng:</p>
+                        <span>{quantity}</span>
+                      </div>
+                      <div className="info-check">
+                        <p>Tổng tiền:</p>
+                        <span>{quantity * data.price} VND</span>
+                      </div>
+                      <h5 className="txt-title">Thông tin khách hàng</h5>
+                      <div className="info-check">
+                        <p>Tên khách hàng:</p>
+                        <span>{customerName}</span>
+                      </div>
+                      <div className="info-check">
+                        <p>Số điện thoại:</p>
+                        <span>{phoneNumber}</span>
+                      </div>
+                      <div className="info-check">
+                        <p>Email:</p>
+                        <span>{email}</span>
+                      </div>
+                      <div className="info-check">
+                        <p>Địa chỉ:</p>
+                        <span>{address} VND</span>
+                      </div>
+                    </Modal.Description>
+                  </Modal.Content>
+                  <Modal.Actions>
+                    <Button onClick={() => setOpen(false)}>Hủy</Button>
+                    <Button onClick={onOrder} color="red">
+                      Xác nhận{" "}
+                    </Button>
+                  </Modal.Actions>
+                </Modal>
               </Form>
             </Segment>
           </div>
         </div>
       </Segment>
+      <Modal
+        onClose={() => setOpenDialog(false)}
+        onOpen={() => setOpenDialog(true)}
+        open={openDialog}
+        size="mini"
+      >
+        <Modal.Header>
+          <h4 className="txt-check">Thông báo</h4>
+        </Modal.Header>
+        <Modal.Content image>
+          <p>{message}</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setOpenDialog(false)}>Đóng</Button>
+        </Modal.Actions>
+      </Modal>
     </div>
   );
 };

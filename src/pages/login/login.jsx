@@ -1,6 +1,5 @@
-import Navbar from "../../components/navbar/navbar";
 import "./login.scss";
-import { Input, Button } from "semantic-ui-react";
+import { Input, Button, Icon, Dimmer, Loader } from "semantic-ui-react";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 const axios = require("axios");
@@ -8,6 +7,8 @@ const axios = require("axios");
 function Login() {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const history = useHistory();
   const handleChange = (e, field) => {
     if (field === "username") {
@@ -17,22 +18,39 @@ function Login() {
     }
   };
   const onLogin = () => {
+    setLoading(true);
     axios.post('https://lap-center.herokuapp.com/api/login', {
       username: username,
       password: password
     })
     .then(function (response) {
       console.log(response);
+      setLoading(false)
       history.push('./')
     })
     .catch(function (error) {
       console.log(error);
+      setLoading(false)
+
       alert("Sai mat khau hoac ten dang nhap!!")
     });
   };
+  let checkInfo = true;
+  (!username || !password) ? checkInfo = true : checkInfo = false;
   return (
     <div>
-      <Navbar />
+      <Dimmer active={loading} inverted >
+        <Loader inverted>Loading</Loader>
+      </Dimmer>
+       <Icon
+        className="icon-home"
+        name="home"
+        size="large"
+        inverted
+        circular
+        link
+        onClick={() => history.push("/")}
+      />
       <div className="login-container">
         <div className="login-form">
           <h1 style={{ textAlign: "center", marginBottom: "40px" }}>
@@ -59,7 +77,7 @@ function Login() {
               value={password}
             />
             <br />
-            <Button className="custom-btn btn-3" onClick={onLogin}>
+            <Button primary onClick={onLogin} disabled={checkInfo}>
               <span>Đăng nhập</span>
             </Button>
             <p style={{ marginTop: "20px", textAlign: "center" }}>

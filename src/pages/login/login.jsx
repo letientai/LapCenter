@@ -27,6 +27,8 @@ function Login() {
       console.log(response);
       setLoading(false)
       history.push('./')
+      localStorage.setItem('customerName', response.data.userName);
+      localStorage.setItem('userId', response.data.userId);
     })
     .catch(function (error) {
       console.log(error);

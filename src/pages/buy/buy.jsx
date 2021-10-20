@@ -26,7 +26,7 @@ const Buy = () => {
   const [open, setOpen] = React.useState(false);
   const [openDialog, setOpenDialog] =useState(false);
   const [message, setMessage] =useState(false);
-
+  const currenUser = localStorage.getItem('customerName');
 
 
 
@@ -63,6 +63,7 @@ const Buy = () => {
       setQuantity(quantity - 1);
     }
   };
+  
 
   let checkInfo = true;
   if (!customerName || !phoneNumber || !email || !address) checkInfo = true;
@@ -103,17 +104,35 @@ const Buy = () => {
       })
       .then(function (res) {
         setLoading(false)
-        console.log(res);
+        currenUser && onAddToHistory();
         setOpenDialog(true)
         setMessage("Đặt hàng thành công!!!")
         
       })
       .catch(function (err) {
-        console.log(err);
         setOpenDialog(false)
         setMessage("Đã có lỗi xảy ra. Vui lòng kiểm tra lại!!")
       });
   };
+  const onAddToHistory = () => {
+    axios
+      .post("https://lap-center.herokuapp.com/api/history/addProductToHistory", {
+        userId: localStorage.getItem("userId"),
+        phone: phoneNumber,
+        address: address,
+        productName: data.name,
+        productBrand: data.brand,
+        quantity: quantity,
+        orderStatus: 1,
+      })
+      .then(function (res) {
+        console.log(res);
+        
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }
   return (
     <div>
       <Navbar />

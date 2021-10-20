@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../../components/navbar/navbar";
 import Card from "../../components/cards/card";
 import { Icon, Input, Segment, Pagination } from "semantic-ui-react";
-const axios = require("axios");
+import HistoryAndCart from "../../components/historyAndCart/historyAndCart";
+import axios from "axios";
 
 function Home() {
   const [data, setData] = useState([]);
@@ -13,6 +14,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  const currenUser = localStorage.getItem('customerName');
 
   const onChangeSearch = (e) => {
     setSearch(e.target.value);
@@ -115,6 +117,8 @@ function Home() {
           </select>
         </div>
       </div>
+      <div className="currentUser">{currenUser && <p>Chào mừng, <span>{currenUser}</span></p>}</div>
+      {currenUser && <HistoryAndCart/>}
       <div className="container-body">
         <div className="menuLeft"></div>
         <Segment loading={loading} className="product">

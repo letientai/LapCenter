@@ -7,6 +7,7 @@ import NotFoundPage from "../pages/notFound/notFound";
 import Register from "../pages/register/register";
 import ProductDetail from "../pages/productDetail/productDetail";
 import Buy from "../pages/buy/buy";
+import History from "../pages/history/history";
 
 
 function Router() {
@@ -20,6 +21,7 @@ function Router() {
                 <Route path="/register" component={Register} />
                 <Route path="/product/:id" component={ProductDetail} />
                 <Route path="/buy/:id" component={Buy} />
+                <Route path="/history/:userId" component={History} />
                 <Route component={NotFoundPage} />
             </Switch>
         </BrowserRouter>

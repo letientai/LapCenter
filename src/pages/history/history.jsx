@@ -26,6 +26,7 @@ function History() {
       })
       .catch(function (error) {
         // handle error
+        setLoading(false);
         console.log(error);
       });
   };

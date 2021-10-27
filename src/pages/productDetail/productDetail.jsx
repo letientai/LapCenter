@@ -41,6 +41,7 @@ const ProductDetail = () => {
   // const id = location.pathname?.replace('product/', '');
   const [openDialog, setOpenDialog] =useState(false);
   const [message, setMessage] =useState(false);
+  const [open, setOpen] = useState(false);
   const moveToBuy = () => {
     history.push(`/buy/${id}`);
   };
@@ -83,6 +84,7 @@ const ProductDetail = () => {
       });
   };
   const onAddToCart = () => {
+    setOpen(false);
     setLoading(true);
     axios
       .post("https://lap-center.herokuapp.com/api/cart/addProductToCart", {
@@ -148,7 +150,7 @@ const ProductDetail = () => {
                 MUA NGAY
               </Button>
               {currenUser && 
-              <Button color="green" className="btnCart" onClick={onAddToCart}>
+              <Button color="green" className="btnCart" onClick={() => setOpen(true)}>
                 THÊM VÀO GIỎ HÀNG
               </Button>
               }
@@ -237,6 +239,25 @@ const ProductDetail = () => {
         </Modal.Content>
         <Modal.Actions>
           <Button onClick={() => setOpenDialog(false)}>Đóng</Button>
+        </Modal.Actions>
+      </Modal>
+      <Modal
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        open={open}
+        size="mini"
+      >
+        <Modal.Header>
+          <h4 className="txt-check">Thông báo</h4>
+        </Modal.Header>
+        <Modal.Content image>
+          <p>Bạn có muốn thêm sản phẩm vào giỏ hàng không ?</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setOpen(false)}>Hủy</Button>
+          <Button color="green" onClick={onAddToCart}>
+            Xác nhận
+          </Button>
         </Modal.Actions>
       </Modal>
       </Segment>

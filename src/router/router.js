@@ -9,6 +9,7 @@ import ProductDetail from "../pages/productDetail/productDetail";
 import Buy from "../pages/buy/buy";
 import History from "../pages/history/history";
 import Cart from "../pages/cart/cart";
+import ManageOrder from "../pages/admin/order/manageOrder";
 
 
 function Router() {
@@ -24,6 +25,7 @@ function Router() {
                 <Route path="/buy/:id" component={Buy} />
                 <Route path="/history/:userId" component={History} />
                 <Route path="/cart/:userId" component={Cart} />
+                <Route path="/admin/order" component={ManageOrder} />
                 <Route component={NotFoundPage} />
             </Switch>
         </BrowserRouter>

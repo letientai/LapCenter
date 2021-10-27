@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Segment, Popup, Button, Modal } from "semantic-ui-react";
 import Navbar from "../../components/navbar/navbar";
 import "./cart.scss";
+import { useHistory } from "react-router-dom"
 import axios from "axios";
 
 function Cart() {
@@ -13,6 +14,7 @@ function Cart() {
   const [message, setMessage] = useState(false);
   const [open, setOpen] = useState(false);
   const [productId, setProductId] = useState("");
+  const history = useHistory();
   useEffect(() => {
     fetchAPI();
   }, []);
@@ -49,6 +51,9 @@ function Cart() {
         console.log(error);
       });
   };
+  const onBuy = (productId) =>{
+    history.push(`/buy/${productId}`)
+  }
   return (
     <div>
       <Navbar />
@@ -102,7 +107,7 @@ function Cart() {
                           icon="shopping cart"
                           color="facebook"
                           circular
-                          // onClick={() => onBuy(item.productId)}
+                          onClick={() => onBuy(item.productId)}
                         />
                       }
                     />

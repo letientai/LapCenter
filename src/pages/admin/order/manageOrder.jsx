@@ -17,12 +17,14 @@ const ManageOrder = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [open, setOpen] = useState(false);
+  const [openRemove, setOpenRemove] = useState(false);
   const [dataItem, setDataItem] = useState([]);
   const [message, setMessage] = useState("");
   const [openDialog, setOpenDialog] = useState("");
   const [orderId, setOrderId] = useState("");
   const [orderStatus, setOrderStatus] = useState(0);
   const [temp, setTemp] = useState([]);
+  const [productId, setProductId] = useState("");
   
   const handlePaginationChange = async (activePage) => {
     setTemp(activePage);
@@ -54,7 +56,7 @@ const ManageOrder = () => {
         setData(response.data.orders);
         setTotalPage(response.data.totalPage);
         setLoading(false);
-        console.log("data", data);
+        console.log("dataas", data);
       })
       .catch(function (error) {
         setLoading(false);
@@ -121,6 +123,25 @@ const ManageOrder = () => {
     const order = parseInt(e.target.value);
     setOrderStatus(order);
   };
+  const onDelete = () => {
+    setLoading(true);
+    setOpenRemove(false);
+    axios
+      .delete(
+        `https://lap-center.herokuapp.com/api/order/removeOrder/${productId}`
+      )
+      .then(function (response) {
+        setLoading(false);
+        setOpenDialog(true);
+        setMessage("Xóa thành công");
+        fetchData()
+      })
+      .catch(function (error) {
+        setOpenDialog(true);
+        setMessage("Xóa không thành công");
+        console.log(error);
+      });
+  };
 
   return (
     <div>
@@ -176,7 +197,10 @@ const ManageOrder = () => {
                         icon="trash alternate"
                         color="youtube"
                         circular
-                        //   onClick={() => onBuy(item.productId)}
+                        onClick={() => {
+                          setProductId(item._id);
+                          setOpenRemove(true)
+                        }}
                       />
                     }
                   />
@@ -272,6 +296,25 @@ const ManageOrder = () => {
         </Modal.Content>
         <Modal.Actions>
           <Button onClick={() => setOpenDialog(false)}>Đóng</Button>
+        </Modal.Actions>
+      </Modal>
+      <Modal
+        onClose={() => setOpenRemove(false)}
+        onOpen={() => setOpenRemove(true)}
+        open={openRemove}
+        size="mini"
+      >
+        <Modal.Header>
+          <h4 className="txt-check">Thông báo</h4>
+        </Modal.Header>
+        <Modal.Content image>
+          <p>Bạn có muốn xóa sản phẩm này không ?</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setOpenRemove(false)}>Hủy</Button>
+          <Button color="green" onClick={onDelete}>
+            Xác nhận
+          </Button>
         </Modal.Actions>
       </Modal>
     </div>

@@ -29,6 +29,7 @@ function Login() {
       history.push('./')
       localStorage.setItem('customerName', response.data.userName);
       localStorage.setItem('userId', response.data.userId);
+      localStorage.setItem('isAdmin', response.data.isAdmin);
     })
     .catch(function (error) {
       console.log(error);

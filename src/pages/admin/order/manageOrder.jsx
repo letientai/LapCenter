@@ -10,28 +10,36 @@ import {
   Pagination,
 } from "semantic-ui-react";
 import axios from "axios";
-const ManageOrder = () => {
+import { useHistory } from "react-router-dom";
 
+const ManageOrder = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [open, setOpen] = useState(false);
-  const [openRemove, setOpenRemove] = useState(false);
   const [dataItem, setDataItem] = useState([]);
   const [message, setMessage] = useState("");
   const [openDialog, setOpenDialog] = useState("");
   const [orderId, setOrderId] = useState("");
   const [orderStatus, setOrderStatus] = useState(0);
   const [temp, setTemp] = useState([]);
-  const [productId, setProductId] = useState("");
-  
+  const [isDelete, setIsDelete] = useState(false);
+  const [isUserRole, setIsUserRole] = useState(false);
+  const isAdmin = localStorage.getItem("isAdmin");
+  const history = useHistory();
   const handlePaginationChange = async (activePage) => {
     setTemp(activePage);
-    const page = parseInt(activePage.target.innerHTML);
+    const page = parseInt(activePage?.target?.innerHTML);
     await setLoading(true);
     await setPageNumber(page);
-    let url = `https://lap-center.herokuapp.com/api/order?pageNumber=${page}`;
+    let url = "";
+    if (pageNumber === 1) {
+      url = `https://lap-center.herokuapp.com/api/order?pageNumber=1`;
+    } else {
+      url = `https://lap-center.herokuapp.com/api/order?pageNumber=${page}`;
+    }
+
     await axios
       .get(url)
       .then(function (response) {
@@ -42,7 +50,6 @@ const ManageOrder = () => {
         setLoading(false);
       })
       .catch(function (error) {
-        // handle error
         console.log(error);
       });
   };
@@ -63,8 +70,25 @@ const ManageOrder = () => {
       });
   };
 
+  // useEffect(() => {
+  //   if (isAdmin === true) {
+  //     fetchData();
+  //   } else {
+  //     setLoading(false);
+  //     setOpenDialog(true);
+  //     setMessage("Bạn không thể truy cập vào địa chỉ này!!!");
+  //     setIsUserRole(true);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    fetchData();
+    if(isAdmin === "undefined" || isAdmin === "false") {
+      setOpenDialog(true)
+      setMessage("Bạn không thể truy cập vào địa chỉ này. Vui lòng quay lại trang chủ!!!");
+      setIsUserRole(true);
+    } else {
+      fetchData();
+    } 
   }, []);
 
   const convertOrder = (order) => {
@@ -118,28 +142,36 @@ const ManageOrder = () => {
     setOpen(true);
   };
 
+  const onOpenDelete = (item) => {
+    setMessage("Bạn có chắc chắn muốn xóa đơn hàng này?");
+    setOpenDialog(true);
+    setOrderId(item._id);
+    setIsDelete(true);
+  };
+
   const handleSelectChange = (e) => {
     console.log("value", parseInt(e.target.value));
     const order = parseInt(e.target.value);
     setOrderStatus(order);
   };
+
   const onDelete = () => {
     setLoading(true);
-    setOpenRemove(false);
+    setIsDelete(false);
     axios
       .delete(
-        `https://lap-center.herokuapp.com/api/order/removeOrder/${productId}`
+        `https://lap-center.herokuapp.com/api/order/removeOrder/${orderId}`
       )
       .then(function (response) {
         setLoading(false);
         setOpenDialog(true);
-        setMessage("Xóa thành công");
-        fetchData()
+        setMessage("Xóa thành công sản phẩm khỏi danh sách!!!");
+        handlePaginationChange(temp);
       })
       .catch(function (error) {
+        setLoading(false);
         setOpenDialog(true);
-        setMessage("Xóa không thành công");
-        console.log(error);
+        setMessage("Xóa không thành công sản phẩm khỏi danh sách!!!");
       });
   };
 
@@ -197,10 +229,7 @@ const ManageOrder = () => {
                         icon="trash alternate"
                         color="youtube"
                         circular
-                        onClick={() => {
-                          setProductId(item._id);
-                          setOpenRemove(true)
-                        }}
+                        onClick={() => onOpenDelete(item)}
                       />
                     }
                   />
@@ -295,26 +324,33 @@ const ManageOrder = () => {
           <p>{message}</p>
         </Modal.Content>
         <Modal.Actions>
-          <Button onClick={() => setOpenDialog(false)}>Đóng</Button>
-        </Modal.Actions>
-      </Modal>
-      <Modal
-        onClose={() => setOpenRemove(false)}
-        onOpen={() => setOpenRemove(true)}
-        open={openRemove}
-        size="mini"
-      >
-        <Modal.Header>
-          <h4 className="txt-check">Thông báo</h4>
-        </Modal.Header>
-        <Modal.Content image>
-          <p>Bạn có muốn xóa sản phẩm này không ?</p>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button onClick={() => setOpenRemove(false)}>Hủy</Button>
-          <Button color="green" onClick={onDelete}>
-            Xác nhận
-          </Button>
+          {!isUserRole && (
+            <Button
+              onClick={() => {
+                setOpenDialog(false);
+                setIsDelete(false);
+              }}
+            >
+              {isDelete === true ? "Hủy" : "Đóng"}
+            </Button>
+          )}
+
+          {isDelete && (
+            <Button onClick={() => onDelete()} color="blue">
+              Xác nhận
+            </Button>
+          )}
+          {isUserRole && (
+            <Button
+              color="blue"
+              onClick={() => {
+                history.push("/");
+                setOpenDialog(false);
+              }}
+            >
+              Trang chủ
+            </Button>
+          )}
         </Modal.Actions>
       </Modal>
     </div>

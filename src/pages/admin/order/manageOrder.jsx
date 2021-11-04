@@ -10,8 +10,9 @@ import {
   Pagination,
 } from "semantic-ui-react";
 import axios from "axios";
-const ManageOrder = () => {
+import { useHistory } from "react-router-dom";
 
+const ManageOrder = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState(1);
@@ -23,13 +24,22 @@ const ManageOrder = () => {
   const [orderId, setOrderId] = useState("");
   const [orderStatus, setOrderStatus] = useState(0);
   const [temp, setTemp] = useState([]);
-  
+  const [isDelete, setIsDelete] = useState(false);
+  const [isUserRole, setIsUserRole] = useState(false);
+  const isAdmin = localStorage.getItem("isAdmin");
+  const history = useHistory();
   const handlePaginationChange = async (activePage) => {
     setTemp(activePage);
-    const page = parseInt(activePage.target.innerHTML);
+    const page = parseInt(activePage?.target?.innerHTML);
     await setLoading(true);
     await setPageNumber(page);
-    let url = `https://lap-center.herokuapp.com/api/order?pageNumber=${page}`;
+    let url = "";
+    if (pageNumber === 1) {
+      url = `https://lap-center.herokuapp.com/api/order?pageNumber=1`;
+    } else {
+      url = `https://lap-center.herokuapp.com/api/order?pageNumber=${page}`;
+    }
+
     await axios
       .get(url)
       .then(function (response) {
@@ -40,7 +50,6 @@ const ManageOrder = () => {
         setLoading(false);
       })
       .catch(function (error) {
-        // handle error
         console.log(error);
       });
   };
@@ -54,15 +63,32 @@ const ManageOrder = () => {
         setData(response.data.orders);
         setTotalPage(response.data.totalPage);
         setLoading(false);
-        console.log("data", data);
+        console.log("dataas", data);
       })
       .catch(function (error) {
         setLoading(false);
       });
   };
 
+  // useEffect(() => {
+  //   if (isAdmin === true) {
+  //     fetchData();
+  //   } else {
+  //     setLoading(false);
+  //     setOpenDialog(true);
+  //     setMessage("Bạn không thể truy cập vào địa chỉ này!!!");
+  //     setIsUserRole(true);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    fetchData();
+    if(isAdmin === "undefined" || isAdmin === "false") {
+      setOpenDialog(true)
+      setMessage("Bạn không thể truy cập vào địa chỉ này. Vui lòng quay lại trang chủ!!!");
+      setIsUserRole(true);
+    } else {
+      fetchData();
+    } 
   }, []);
 
   const convertOrder = (order) => {
@@ -116,10 +142,37 @@ const ManageOrder = () => {
     setOpen(true);
   };
 
+  const onOpenDelete = (item) => {
+    setMessage("Bạn có chắc chắn muốn xóa đơn hàng này?");
+    setOpenDialog(true);
+    setOrderId(item._id);
+    setIsDelete(true);
+  };
+
   const handleSelectChange = (e) => {
     console.log("value", parseInt(e.target.value));
     const order = parseInt(e.target.value);
     setOrderStatus(order);
+  };
+
+  const onDelete = () => {
+    setLoading(true);
+    setIsDelete(false);
+    axios
+      .delete(
+        `https://lap-center.herokuapp.com/api/order/removeOrder/${orderId}`
+      )
+      .then(function (response) {
+        setLoading(false);
+        setOpenDialog(true);
+        setMessage("Xóa thành công sản phẩm khỏi danh sách!!!");
+        handlePaginationChange(temp);
+      })
+      .catch(function (error) {
+        setLoading(false);
+        setOpenDialog(true);
+        setMessage("Xóa không thành công sản phẩm khỏi danh sách!!!");
+      });
   };
 
   return (
@@ -176,7 +229,7 @@ const ManageOrder = () => {
                         icon="trash alternate"
                         color="youtube"
                         circular
-                        //   onClick={() => onBuy(item.productId)}
+                        onClick={() => onOpenDelete(item)}
                       />
                     }
                   />
@@ -271,7 +324,33 @@ const ManageOrder = () => {
           <p>{message}</p>
         </Modal.Content>
         <Modal.Actions>
-          <Button onClick={() => setOpenDialog(false)}>Đóng</Button>
+          {!isUserRole && (
+            <Button
+              onClick={() => {
+                setOpenDialog(false);
+                setIsDelete(false);
+              }}
+            >
+              {isDelete === true ? "Hủy" : "Đóng"}
+            </Button>
+          )}
+
+          {isDelete && (
+            <Button onClick={() => onDelete()} color="blue">
+              Xác nhận
+            </Button>
+          )}
+          {isUserRole && (
+            <Button
+              color="blue"
+              onClick={() => {
+                history.push("/");
+                setOpenDialog(false);
+              }}
+            >
+              Trang chủ
+            </Button>
+          )}
         </Modal.Actions>
       </Modal>
     </div>
